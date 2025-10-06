@@ -1,0 +1,55 @@
+# Pelican Wings Configuration
+# This is a basic configuration for Wings
+# You may need to customize this based on your setup
+
+debug: false
+username: pelican
+uuid: ""
+
+# The location where Wings should look for server files.
+data: /var/lib/pelican
+
+# The socket file that Wings should use for Docker.
+docker:
+  socket: /var/run/docker.sock
+  network:
+    name: wings-network
+
+# API configuration for communicating with the Panel.
+api:
+  host: 0.0.0.0
+  port: 8080
+  ssl:
+    enabled: false
+  token: ""
+
+# The location where Wings should store logs.
+system:
+  user: pelican
+  root_directory: /var/lib/pelican
+  log_directory: /var/log/pelican
+  tmp_directory: /tmp/pelican
+
+# Configuration for how Wings should handle automatic updating.
+updates:
+  enabled: true
+  branch: main
+
+# The location where Wings should store backups.
+backups:
+  disk: local
+  directory: /var/lib/pelican/backups
+
+# Remote server configuration (for SFTP, etc.)
+remote:
+  sftp:
+    enabled: false
+
+# Allowed origins for CORS requests (for the API)
+allowed_origins: []
+
+# Throttle configuration for API requests
+throttle:
+  enabled: true
+  limit: 60
+  reset: 60
