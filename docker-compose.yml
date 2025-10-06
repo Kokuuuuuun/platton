@@ -6,16 +6,16 @@ services:
     networks:
       - pelican-network
     ports:
-      - "8686:80"
+      - "80:80"
     volumes:
       - pelican-panel-data:/pelican-data
       - pelican-panel-logs:/var/www/html/storage/logs
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Removed Caddyfile mount as Coolify handles reverse proxy
     environment:
       - APP_ENV=production
       - APP_URL=${APP_URL}
       - APP_TIMEZONE=${APP_TIMEZONE}
-      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      # ADMIN_EMAIL not needed - Coolify handles SSL certificates
       - DB_CONNECTION=${DB_CONNECTION}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}

@@ -7,8 +7,9 @@ This repository contains a Docker Compose setup for deploying Pelican Panel usin
 - **Pelican Panel**: Web-based game server management panel
 - **Pelican Wings**: Daemon for managing game servers
 - **SQLite Database**: Lightweight database (can be changed to MySQL/MariaDB)
-- **Caddy Web Server**: Built-in web server with automatic SSL
+- **Built-in Web Server**: Panel includes its own web server
 - **Persistent Storage**: All data persists across deployments
+- **Coolify Integration**: Optimized for deployment with Coolify
 
 ## Quick Start with Coolify
 
@@ -23,27 +24,19 @@ This repository contains a Docker Compose setup for deploying Pelican Panel usin
 1. **Create a new project** in Coolify
 2. **Add a Git source** pointing to this repository (or upload files manually)
 3. **Add a service** with these settings:
-   - **Service Type**: Docker Compose
    - **Docker Compose File**: `docker-compose.yml`
    - **Environment Variables**: Copy from `.env.example` and customize
 
 ### 3. Configure Environment Variables
 
-Copy `.env.example` to `.env` and update:
-
-```bash
-# Required
-APP_URL=https://your-domain.com
-ADMIN_EMAIL=admin@your-domain.com
-
-# Optional (can be changed later)
-APP_TIMEZONE=America/New_York
-```
+Copy `.env.example` to `.env` and update these values:
+   - `APP_URL`: Your actual domain (e.g., `https://panel.yourdomain.com`)
+   - `APP_TIMEZONE`: Your timezone (e.g., `America/New_York`)
+   - Keep other settings as default (SQLite database is recommended for getting started)
 
 ### 4. Deploy
 
 Click "Deploy" in Coolify. The deployment will:
-- Pull the latest Pelican Panel and Wings images
 - Set up persistent volumes for data storage
 - Configure networking between services
 
@@ -67,7 +60,7 @@ If you want to run game servers on this machine:
 
 ## Ports Used
 
-- **8080**: Panel web interface (internal)
+- **80**: Panel web interface (internal - Coolify handles external access)
 - **8443**: Wings daemon (internal)
 - **2022**: Wings API (internal)
 
