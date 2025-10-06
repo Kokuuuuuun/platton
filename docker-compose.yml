@@ -1,0 +1,77 @@
+services:
+  panel:
+    image: ghcr.io/pelican-dev/panel:latest
+    container_name: pelican-panel
+    restart: unless-stopped
+    networks:
+      - pelican-network
+    ports:
+      - "8686:80"
+    volumes:
+      - pelican-panel-data:/pelican-data
+      - pelican-panel-logs:/var/www/html/storage/logs
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    environment:
+      - APP_ENV=production
+      - APP_URL=${APP_URL}
+      - APP_TIMEZONE=${APP_TIMEZONE}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CACHE_DRIVER=${CACHE_DRIVER}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION}
+      - SESSION_DRIVER=${SESSION_DRIVER}
+
+  wings:
+    image: ghcr.io/pelican-dev/wings:latest
+    container_name: pelican-wings
+    restart: unless-stopped
+    networks:
+      - pelican-network
+      - wings-network
+    ports:
+      - "2022:2022"
+      - "8443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers/:/var/lib/docker/containers/
+      - pelican-wings-data:/etc/pelican/
+      - pelican-wings-logs:/var/log/pelican/
+      - pelican-wings-temp:/tmp/pelican/
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+    environment:
+      - WINGS_UID=1000
+      - WINGS_GID=1000
+      - WINGS_USERNAME=pelican
+      - WINGS_TOKEN=${WINGS_TOKEN}
+      - APP_TIMEZONE=${APP_TIMEZONE}
+
+networks:
+  pelican-network:
+    name: pelican-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  wings-network:
+    name: wings-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  pelican-panel-data:
+    driver: local
+  pelican-panel-logs:
+    driver: local
+  pelican-wings-data:
+    driver: local
+  pelican-wings-logs:
+    driver: local
+  pelican-wings-temp:
+    driver: local
