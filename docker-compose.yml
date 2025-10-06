@@ -8,7 +8,7 @@ services:
     volumes:
       - pelican-panel-data:/pelican-data
       - pelican-panel-logs:/var/www/html/storage/logs
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Using container's built-in Caddyfile to avoid mount conflicts
     environment:
       - APP_ENV=production
       - APP_URL=${APP_URL}
